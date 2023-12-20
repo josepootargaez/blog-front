@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Grid, Paper, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const Addblog = () => {
   const [formData, setFormData]:any = useState({
@@ -42,67 +43,74 @@ const Addblog = () => {
   };
 
   return (
-    <Grid container justifyContent="center" alignItems="center" height="100vh">
-      <Grid item xs={10} sm={6} md={4}>
-        <Paper elevation={3} style={{ padding: 16 }}>
-          <Typography variant="h5" align="center" gutterBottom>
-            Datos de entrada
-          </Typography>
+    <>
+        <Grid container justifyContent="center" alignItems="center" height="100vh">
+        <Grid item xs={10} sm={6} md={4}>
+            <Paper elevation={3} style={{ padding: 16 }}>
+            <Typography variant="h5" align="center" gutterBottom>
+                Datos de entrada
+            </Typography>
 
-          <form onSubmit={handleSubmit}>
-            <TextField
-              label="Titulo"
-              name="Titulo"
-              fullWidth
-              margin="normal"
-              value={formData.Titulo}
-              onChange={handleChange}
-              error={Boolean(formErrors.Titulo)}
-              helperText={formErrors.Titulo}
-              required
-            />
+            <form onSubmit={handleSubmit}>
+                <TextField
+                label="Titulo"
+                name="Titulo"
+                fullWidth
+                margin="normal"
+                value={formData.Titulo}
+                onChange={handleChange}
+                error={Boolean(formErrors.Titulo)}
+                helperText={formErrors.Titulo}
+                required
+                />
 
-            <TextField
-              label="Autor"
-              name="Autor"
-              fullWidth
-              margin="normal"
-              value={formData.Autor}
-              onChange={handleChange}
-              error={Boolean(formErrors.Autor)}
-              helperText={formErrors.Autor}
-              required
-            />
+                <TextField
+                label="Autor"
+                name="Autor"
+                fullWidth
+                margin="normal"
+                value={formData.Autor}
+                onChange={handleChange}
+                error={Boolean(formErrors.Autor)}
+                helperText={formErrors.Autor}
+                required
+                />
 
-            <TextField
-              label="Fecha"
-              type="date"
-              fullWidth
-              margin="normal"
-              required
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
+                <TextField
+                label="Fecha"
+                type="date"
+                fullWidth
+                margin="normal"
+                required
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                />
 
-            <TextField
-              label="Contenido"
-              name="Contenido"
-              multiline
-              rows={4}
-              fullWidth
-              variant="outlined"
-              margin="normal"
-              required
-            />
+                <TextField
+                label="Contenido"
+                name="Contenido"
+                multiline
+                rows={4}
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                required
+                />
 
-            <Button type="submit" variant="contained" color="primary" fullWidth style={{ marginTop: 16 }}>
-              Guardar
+                <Button type="submit" variant="contained" color="success" fullWidth style={{ marginTop: 16 }}>
+                Guardar
+                </Button>
+            </form>
+            </Paper>
+        </Grid>
+        </Grid>
+        <Link to='/'>
+            <Button type="submit" variant="contained" color="primary" style={{marginBottom:'20px'}} >
+                    regresar
             </Button>
-          </form>
-        </Paper>
-      </Grid>
-    </Grid>
+        </Link>
+    </>
   );
 };
 

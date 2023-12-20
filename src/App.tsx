@@ -22,7 +22,7 @@ function App() {
       <Routes>
         {/* Ruta para la página de inicio */}
         <Route path="/" element={<List />} />
-        <Route path="/save" element={<Addblog />} />
+        <Route path="/add" element={<Addblog />} />
         <Route path="*" element={<List />} />
       </Routes>
   </Router>

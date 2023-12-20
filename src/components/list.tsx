@@ -45,10 +45,10 @@ const List: React.FC = () => {
   return (
     <>
       <Grid container justifyContent="flex-end">
-        <Link to="/save">
+        <Link to="/add">
           <Button
             variant="contained"
-            color="primary"
+            color="success"
             style={{ marginBottom: "20px" }}
           >
             Agregar entrada

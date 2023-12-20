@@ -76,27 +76,23 @@ const Addblog = () => {
 
             <TextField
               label="Fecha"
-              type="Fecha"
-              name="Fecha"
+              type="date"
               fullWidth
               margin="normal"
-              value={formData.Fecha}
-              onChange={handleChange}
-              error={Boolean(formErrors.Fecha)}
-              helperText={formErrors.Fecha}
               required
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
 
             <TextField
               label="Contenido"
-              type="Contenido"
               name="Contenido"
+              multiline
+              rows={4}
               fullWidth
+              variant="outlined"
               margin="normal"
-              value={formData.Contenido}
-              onChange={handleChange}
-              error={Boolean(formErrors.Contenido)}
-              helperText={formErrors.Contenido}
               required
             />
 

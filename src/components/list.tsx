@@ -10,41 +10,47 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getListBlog } from "../api/getListBlog";
 
 const List: React.FC = () => {
-  const array: Array<any> = [
-    {
-      Titulo: "Iro man 2",
-      Autor: "Test",
-      Fecha: "text",
-      Contenido: "test testteadsañdsajlkdjfkjdlñfjsdjñfdjslñ",
-    },
-    {
-      Titulo: "Iro man 3",
-      Autor: "Test2",
-      Fecha: "text2",
-      Contenido: "test testteadsañdsajlkdjfkjdlñfjsdjñfdjslñ",
-    },
-    {
-      Titulo: "hulk",
-      Autor: "Test2",
-      Fecha: "text2",
-      Contenido: "test testteadsañdsajlkdjfkjdlñfjsdjñfdjslñ",
-    },
-  ];
+  const [list, setlist] = useState([]);
+  const [loading, setLoading] = useState(true);
+  async function handler(){
+   return await getListBlog();
+  
+  }
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const result = await handler();
+        setlist(result);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }finally {
+        setLoading(false);
+      } 
+    };
+
+    fetchDataAsync();
+  }, []);
+
+  const array: Array<any> = list;
+  console.log(array);
   const [filter, setFilter] = useState('');
 
   const filteredData = array.filter(item =>{
-    item.Contenido = item.Contenido.slice(0, 70);
-    return item.Titulo.toLowerCase().includes(filter.toLowerCase())
-
+    if(item.content){
+      item.content = item.content.slice(0, 70);
+      return item.tittle.toLowerCase().includes(filter.toLowerCase())
+    }
+    return []
   }
   );
   return (
     <>
-      <Grid container justifyContent="flex-end">
+      <Grid container justifyContent="flex-end" onLoad={handler}>
         <Link to="/add">
           <Button
             variant="contained"
@@ -54,38 +60,43 @@ const List: React.FC = () => {
             Agregar entrada
           </Button>
         </Link>
-       
       </Grid>
+
       <TextField
-        label="Filtrar por titulo"
+        label="Filtrar por título"
         variant="outlined"
         fullWidth
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
         style={{ marginBottom: 16 }}
       />
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Titulo</TableCell>
-              <TableCell>Autor</TableCell>
-              <TableCell>Fecha</TableCell>
-              <TableCell>Contenido</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredData.map((movie, index) => (
-              <TableRow key={index}>
-                <TableCell>{movie.Titulo}</TableCell>
-                <TableCell>{movie.Autor}</TableCell>
-                <TableCell>{movie.Fecha}</TableCell>
-                <TableCell>{movie.Contenido}</TableCell>
+
+      {loading ? (
+        <div>Cargando...</div>
+      ) : (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Titulo</TableCell>
+                <TableCell>Autor</TableCell>
+                <TableCell>Fecha</TableCell>
+                <TableCell>Contenido</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {filteredData.map((movie, index) => (
+                <TableRow key={index}>
+                  <TableCell>{movie.title}</TableCell>
+                  <TableCell>{movie.author}</TableCell>
+                  <TableCell>{movie.date}</TableCell>
+                  <TableCell>{movie.content}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </>
   );
 };

@@ -11,6 +11,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const List: React.FC = () => {
   const array: Array<any> = [
@@ -44,13 +45,16 @@ const List: React.FC = () => {
   return (
     <>
       <Grid container justifyContent="flex-end">
-        <Button
-          variant="contained"
-          color="primary"
-          style={{ marginBottom: "20px" }}
-        >
-          Agregar entrada
-        </Button>
+        <Link to="/save">
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ marginBottom: "20px" }}
+          >
+            Agregar entrada
+          </Button>
+        </Link>
+       
       </Grid>
       <TextField
         label="Filtrar por titulo"

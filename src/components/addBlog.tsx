@@ -51,7 +51,7 @@ const Addblog = () => {
 
           <form onSubmit={handleSubmit}>
             <TextField
-              label="Nombre"
+              label="Titulo"
               name="Titulo"
               fullWidth
               margin="normal"
@@ -63,7 +63,7 @@ const Addblog = () => {
             />
 
             <TextField
-              label="Apellido"
+              label="Autor"
               name="Autor"
               fullWidth
               margin="normal"
@@ -75,7 +75,7 @@ const Addblog = () => {
             />
 
             <TextField
-              label="Correo Electrónico"
+              label="Fecha"
               type="Fecha"
               name="Fecha"
               fullWidth
@@ -88,7 +88,7 @@ const Addblog = () => {
             />
 
             <TextField
-              label="Contraseña"
+              label="Contenido"
               type="Contenido"
               name="Contenido"
               fullWidth

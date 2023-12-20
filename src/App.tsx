@@ -3,7 +3,12 @@ import logo from './logo.svg';
 import './App.css';
 import List from './components/list';
 import { Container } from '@mui/material';
-
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes
+} from "react-router-dom";
+import Addblog from './components/addBlog'
 function App() {
   return (
     <Container maxWidth="lg" style={{
@@ -13,7 +18,15 @@ function App() {
       justifyContent: 'center',
       marginTop:'70px'
     }}>
-     <List></List>
+
+  <Router>
+      <Routes>
+        {/* Ruta para la página de inicio */}
+        <Route path="/" element={<List />} />
+        <Route path="/save" element={<Addblog />} />
+        <Route path="*" element={<List />} />
+      </Routes>
+  </Router>
     </Container>
   );
 }

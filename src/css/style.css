@@ -1,0 +1,9 @@
+.botonDisabled  {
+    cursor: not-allowed!important;
+    pointer-events: none!important;
+}
+
+.red{
+    color:red;
+}
+

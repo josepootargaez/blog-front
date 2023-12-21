@@ -8,6 +8,7 @@ import {
   Routes
 } from "react-router-dom";
 import Addblog from './components/addBlog'
+import './css/style.css'
 function App() {
   return (
     <Container maxWidth="lg" style={{

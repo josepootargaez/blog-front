@@ -13,52 +13,72 @@ import {
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getListBlog } from "../api/getListBlog";
-
+import ValidConnection from "./validConnection";
 const List: React.FC = () => {
   const [list, setlist] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [connection, setconnection] = useState(navigator.onLine);
+
+
   async function handler(){
    return await getListBlog();
-  
   }
-  useEffect(() => {
-    const fetchDataAsync = async () => {
-      try {
-        const result = await handler();
-        setlist(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }finally {
-        setLoading(false);
-      } 
-    };
 
-    fetchDataAsync();
+  useEffect(() => {
+
+    const handleConexionChange = () => {
+      setconnection(navigator.onLine);
+    };
+    window.addEventListener('online', handleConexionChange);
+    window.addEventListener('offline', handleConexionChange);
+    if(connection == true){
+      const fetchDataAsync = async () => {
+        try {
+          const result = await handler();
+          setlist(result);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }finally {
+          setLoading(false);
+        } 
+      };
+      setLoading(false);
+      fetchDataAsync();
+    }
+
+    return () => {
+      window.removeEventListener('online', handleConexionChange);
+      window.removeEventListener('offline', handleConexionChange);
+    };
   }, []);
 
   const array: Array<any> = list;
   const [filter, setFilter] = useState('');
 
-  const filteredData = array.filter(item =>{
+  const filteredData = array.length > 0 ? array.filter(item =>{
     if(item.content){
       item.content = item.content.slice(0, 70);
       return item.title.toLowerCase().includes(filter.toLowerCase())
     }
     return []
   }
-  );
+  ) : []; 
+
+
   return (
     <>
+     {connection ==false ? <ValidConnection/> : ''}
       <Grid container justifyContent="flex-end" onLoad={handler}>
-        <Link to="/add">
+        {connection == true ? <Link to="/add"  >
           <Button
             variant="contained"
             color="success"
-            style={{ marginBottom: "20px" }}
+            style={{ marginBottom: "20px",pointerEvents: 'none',}}
           >
             Agregar entrada
           </Button>
-        </Link>
+        </Link>:''}
+        
       </Grid>
 
       <TextField

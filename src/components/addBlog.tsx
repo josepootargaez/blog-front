@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { TextField, Button, Grid, Paper, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { createBlog } from '../api/createBlog';
+import { useNavigate } from 'react-router-dom';
+const Addblog =  () => {
+    const navigate = useNavigate();
 
-const Addblog = () => {
   const [formData, setFormData]:any = useState({
-    Titulo: '',
-    Autor: '',
-    Fecha: '',
-    Contenido: '',
+    title: '',
+    author: '',
+    content: '',
   });
 
   const [formErrors, setFormErrors] = useState({
-    Titulo: '',
-    Autor: '',
-    Fecha: '',
-    Contenido: '',
+    title: '',
+    author: '',
+    content: '',
   });
 
   const handleChange = (e:any) => {
@@ -23,9 +24,8 @@ const Addblog = () => {
     setFormErrors({ ...formErrors, [name]: '' });
   };
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
-
     // Validar campos obligatorios
     const errors:any = {};
     Object.keys(formData).forEach((key) => {
@@ -38,7 +38,25 @@ const Addblog = () => {
       setFormErrors(errors);
     } else {
       // Enviar el formulario o realizar otras acciones
-      console.log('Formulario enviado:', formData);
+        const fecha = new Date();
+        const año = fecha.getFullYear();
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+        const dia = String(fecha.getDate()).padStart(2, '0');
+        const horas = String(fecha.getHours()).padStart(2, '0');
+        const minutos = String(fecha.getMinutes()).padStart(2, '0');
+        const segundos = String(fecha.getSeconds()).padStart(2, '0');
+
+  // Formateamos la cadena de fecha
+  const fechaString = `${año}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
+      const obj = {
+        ...formData,
+        date:fechaString
+      }
+      console.log('Formulario enviado:', obj);
+      const res:any = await createBlog(obj);
+      if(res?.success == true){
+        navigate('/');
+      }
     }
   };
 
@@ -54,47 +72,38 @@ const Addblog = () => {
             <form onSubmit={handleSubmit}>
                 <TextField
                 label="Titulo"
-                name="Titulo"
+                name="title"
                 fullWidth
                 margin="normal"
-                value={formData.Titulo}
+                value={formData.title}
                 onChange={handleChange}
-                error={Boolean(formErrors.Titulo)}
-                helperText={formErrors.Titulo}
+                error={Boolean(formErrors.title)}
+                helperText={formErrors.title}
                 required
                 />
 
                 <TextField
                 label="Autor"
-                name="Autor"
+                name="author"
                 fullWidth
                 margin="normal"
-                value={formData.Autor}
+                value={formData.author}
                 onChange={handleChange}
-                error={Boolean(formErrors.Autor)}
-                helperText={formErrors.Autor}
+                error={Boolean(formErrors.author)}
+                helperText={formErrors.author}
                 required
-                />
-
-                <TextField
-                label="Fecha"
-                type="date"
-                fullWidth
-                margin="normal"
-                required
-                InputLabelProps={{
-                    shrink: true,
-                }}
                 />
 
                 <TextField
                 label="Contenido"
-                name="Contenido"
+                name="content"
                 multiline
                 rows={4}
                 fullWidth
                 variant="outlined"
                 margin="normal"
+                value={formData.content}
+                onChange={handleChange}
                 required
                 />
 

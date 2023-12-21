@@ -37,13 +37,12 @@ const List: React.FC = () => {
   }, []);
 
   const array: Array<any> = list;
-  console.log(array);
   const [filter, setFilter] = useState('');
 
   const filteredData = array.filter(item =>{
     if(item.content){
       item.content = item.content.slice(0, 70);
-      return item.tittle.toLowerCase().includes(filter.toLowerCase())
+      return item.title.toLowerCase().includes(filter.toLowerCase())
     }
     return []
   }

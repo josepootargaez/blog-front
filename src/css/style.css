@@ -6,4 +6,17 @@
 .red{
     color:red;
 }
+.tabla-con-encabezados-fijos {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  #cuerpo-desplazable {
+    overflow-y: scroll;
+    max-height: 300px;
+  }
 
+  thead {
+    position: sticky;
+    top: 0;
+}

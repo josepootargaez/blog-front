@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   Grid,
   Paper,
   Table,
@@ -15,7 +16,7 @@ import { Link } from "react-router-dom";
 import { getListBlog } from "../api/getListBlog";
 import ValidConnection from "./validConnection";
 const List: React.FC = () => {
-  const [list, setlist] = useState([]);
+  const [list, setlist]:Array<any>= useState([]);
   const [loading, setLoading] = useState(true);
   const [connection, setconnection] = useState(navigator.onLine);
 
@@ -23,6 +24,17 @@ const List: React.FC = () => {
   async function handler(){
    return await getListBlog();
   }
+  const fetchDataAsync = async () => {
+    try {
+      const result = await handler();
+      setlist(result);
+      return true
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }finally {
+      setLoading(false);
+    } 
+  };
 
   useEffect(() => {
 
@@ -32,16 +44,7 @@ const List: React.FC = () => {
     window.addEventListener('online', handleConexionChange);
     window.addEventListener('offline', handleConexionChange);
     if(connection == true){
-      const fetchDataAsync = async () => {
-        try {
-          const result = await handler();
-          setlist(result);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }finally {
-          setLoading(false);
-        } 
-      };
+     
       setLoading(false);
       fetchDataAsync();
     }
@@ -55,16 +58,32 @@ const List: React.FC = () => {
   const array: Array<any> = list;
   const [filter, setFilter] = useState('');
 
-  const filteredData = array.length > 0 ? array.filter(item =>{
-    if(item.content){
-      item.content = item.content.slice(0, 70);
-      return item.title.toLowerCase().includes(filter.toLowerCase())
-    }
-    return []
-  }
-  ) : []; 
+  const [filtro, setFiltro] = useState('');
+  const [filtroTitulo, setFiltroTitulo] = useState(true);
+  const [filtroAutor, setFiltroAutor] = useState(false);
+  const [filtroContenido, setFiltroContenido] = useState(false);
+  
+  const handleFiltrar = async () => {
+    const campoFiltrar = filtroTitulo ? 'title' : filtroAutor ? 'author' : filtroContenido ? 'content' : '';
+    let lisArray= list;  
+    if(list.length == 0){
+      lisArray = await handler();
+      }
+        const datosFiltrados = lisArray.filter((dato:any) =>
+        dato[campoFiltrar].toLowerCase().includes(filtro.toLowerCase())
+      );
+      setlist(datosFiltrados);
+    
+  };
 
-
+  const handleLimpiarFiltros = () => {
+    setlist(list);
+    setFiltro('');
+    setFiltroTitulo(true);
+    setFiltroAutor(false);
+    setFiltroContenido(false);
+    fetchDataAsync();
+  };
   return (
     <>
      {connection ==false ? <ValidConnection/> : ''}
@@ -82,29 +101,89 @@ const List: React.FC = () => {
       </Grid>
 
       <TextField
-        label="Filtrar por título"
+        label={`Filtrar por ${filtroTitulo ? 'título' : filtroAutor ? 'autor' : filtroContenido ? 'contenido' : ''}`}
         variant="outlined"
         fullWidth
-        value={filter}
-        onChange={(e) => setFilter(e.target.value)}
+        value={filtro}
+        onChange={(e) => setFiltro(e.target.value)}
         style={{ marginBottom: 16 }}
       />
+      <Grid container spacing={1} className="mi-fila"   style={{ marginBottom: 15 }}>
+        <Grid item xs={2}>
+        <div>
+        <Checkbox
+          checked={filtroTitulo}
+          onChange={() => {
+            setFiltroTitulo(true);
+            setFiltroAutor(false);
+            setFiltroContenido(false);
+          }}
+        />
+        <label>Título</label>
+      </div>
+        </Grid>
+
+        <Grid item xs={2}>
+          <div>
+          <Checkbox
+          checked={filtroAutor}
+          onChange={() => {
+            setFiltroTitulo(false);
+            setFiltroAutor(true);
+            setFiltroContenido(false);
+          }}
+        />
+        <label>Autor</label>
+        </div>
+        </Grid>
+
+        <Grid item xs={2}>
+          <div>
+          <Checkbox
+          checked={filtroContenido}
+          onChange={() => {
+            setFiltroTitulo(false);
+            setFiltroAutor(false);
+            setFiltroContenido(true);
+          }}
+        />
+        <label>Contenido</label>
+        </div>
+        </Grid>
+
+        <Grid item xs={1}>
+          <Button
+           variant="contained"
+           color="primary"
+           onClick={handleFiltrar}>FIltrar
+           </Button>
+        </Grid>
+        <Grid item xs={2}>
+        <Button variant="contained" color="secondary" onClick={handleLimpiarFiltros}>
+          Limpiar Filtros
+        </Button>
+        </Grid>
+      </Grid>
+      
+      
+     
+ 
 
       {loading ? (
         <div>Cargando...</div>
       ) : (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} className="tabla-con-encabezados-fijos">
           <Table>
-            <TableHead>
+            <TableHead style={{ background:"black", color:"white"}}>
               <TableRow>
-                <TableCell>Titulo</TableCell>
-                <TableCell>Autor</TableCell>
-                <TableCell>Fecha</TableCell>
-                <TableCell>Contenido</TableCell>
+                <TableCell style={{ color:"white"}}>Titulo</TableCell>
+                <TableCell style={{ color:"white"}}>Autor</TableCell>
+                <TableCell style={{ color:"white"}}>Fecha</TableCell>
+                <TableCell style={{ color:"white"}}>Contenido</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredData.map((movie, index) => (
+              {list.map((movie:any, index:any) => (
                 <TableRow key={index}>
                   <TableCell>{movie.title}</TableCell>
                   <TableCell>{movie.author}</TableCell>

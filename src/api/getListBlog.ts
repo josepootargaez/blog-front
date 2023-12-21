@@ -7,7 +7,7 @@ export const getListBlog = async ()=>{
             url:"/list",
             headers:{},
         })
-        return response.data;
+        return response.data.data;
     } catch (error) {
         return error
     }

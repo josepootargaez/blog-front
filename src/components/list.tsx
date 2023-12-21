@@ -65,14 +65,18 @@ const List: React.FC = () => {
   
   const handleFiltrar = async () => {
     const campoFiltrar = filtroTitulo ? 'title' : filtroAutor ? 'author' : filtroContenido ? 'content' : '';
-    let lisArray= list;  
+    let listArray= list;  
     if(list.length == 0){
-      lisArray = await handler();
+      if(connection == true){
+        listArray = await handler();
       }
-        const datosFiltrados = lisArray.filter((dato:any) =>
+      }
+      if(listArray.length > 0){
+        const datosFiltrados = listArray.filter((dato:any) =>
         dato[campoFiltrar].toLowerCase().includes(filtro.toLowerCase())
       );
       setlist(datosFiltrados);
+      }
     
   };
 
@@ -183,14 +187,21 @@ const List: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {list.map((movie:any, index:any) => (
+              {list.length > 0 ? list.map((movie:any, index:any) => (
                 <TableRow key={index}>
                   <TableCell>{movie.title}</TableCell>
                   <TableCell>{movie.author}</TableCell>
                   <TableCell>{movie.date}</TableCell>
                   <TableCell>{movie.content}</TableCell>
                 </TableRow>
-              ))}
+              )):
+              <TableRow >
+                  <TableCell>{}</TableCell>
+                  <TableCell>{}</TableCell>
+                  <TableCell>{}</TableCell>
+                  <TableCell>{}</TableCell>
+                </TableRow>
+              }
             </TableBody>
           </Table>
         </TableContainer>

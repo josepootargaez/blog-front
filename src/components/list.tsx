@@ -66,17 +66,16 @@ const List: React.FC = () => {
   const handleFiltrar = async () => {
     const campoFiltrar = filtroTitulo ? 'title' : filtroAutor ? 'author' : filtroContenido ? 'content' : '';
     let listArray= list;  
-    if(list.length == 0){
       if(connection == true){
         listArray = await handler();
+        if(listArray.length > 0){
+          const datosFiltrados = listArray.filter((dato:any) =>
+          dato[campoFiltrar].toLowerCase().includes(filtro.toLowerCase())
+        );
+        setlist(datosFiltrados);
+        }
       }
-      }
-      if(listArray.length > 0){
-        const datosFiltrados = listArray.filter((dato:any) =>
-        dato[campoFiltrar].toLowerCase().includes(filtro.toLowerCase())
-      );
-      setlist(datosFiltrados);
-      }
+      
     
   };
 
@@ -86,7 +85,9 @@ const List: React.FC = () => {
     setFiltroTitulo(true);
     setFiltroAutor(false);
     setFiltroContenido(false);
-    fetchDataAsync();
+    if(connection == true){
+      fetchDataAsync();
+    }
   };
   return (
     <>

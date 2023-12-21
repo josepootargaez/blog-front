@@ -8,7 +8,7 @@ export const createBlog = async (obj:any)=>{
             headers:{},
             data:obj
         })
-        return response;
+        return response.data;
     } catch (error) {
         return error
     }

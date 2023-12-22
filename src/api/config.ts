@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL:string ='http://localhost:3004/';
+const baseURL:string ='https://blog-back-git-main-joses-projects-de992dfc.vercel.app/';
 export const Instance = axios.create({
     baseURL,
     headers:{

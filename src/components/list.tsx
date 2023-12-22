@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -27,13 +28,7 @@ const List: React.FC = () => {
   }
   const fetchDataAsync = async () => {
     try {
-      let result = await handler();
-      result=result.map((res:any)=>{
-        const content = res.content.length >67 ?  `${res.content.slice(0, 67)}...` : res.content
-        res.content = content;
-        
-        return res;
-      })
+      const result = await handler();
       setlist(result);
       return true
     } catch (error) {
@@ -80,8 +75,6 @@ const List: React.FC = () => {
         listArray = await handler();
         if(listArray.length > 0){
           const datosFiltrados = listArray.filter((dato:any) =>{
-          const content = dato.content.length >67 ?  `${dato.content.slice(0, 67)}...` : dato.content
-          dato.content = content;
           return dato[campoFiltrar].toLowerCase().includes(filtro.toLowerCase())
         });
         setlist(datosFiltrados);
@@ -90,7 +83,15 @@ const List: React.FC = () => {
       
     
   };
+  const [selectedItem, setSelectedItem] = useState(null);
+  const handleRowClick = (item:any) => {
+    if(selectedItem==null){
+      setSelectedItem(item);
+    }else{
+      setSelectedItem(null);
 
+    }
+  };
   const handleLimpiarFiltros = () => {
     setlist(list);
     setFiltro('');
@@ -201,11 +202,17 @@ const List: React.FC = () => {
             </TableHead>
             <TableBody>
               {list.length > 0 ? list.map((movie:any, index:any) => (
-                <TableRow key={index}>
+                <TableRow key={movie.id} >
                   <TableCell>{movie.title}</TableCell>
                   <TableCell>{movie.author}</TableCell>
                   <TableCell>{movie.date}</TableCell>
-                  <TableCell style={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'normal' }}>{movie.content}</TableCell>
+                  <TableCell onClick={()=>handleRowClick(movie)} className="click" style={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'normal' }}>
+                  {selectedItem === movie  ? (
+                    <Typography>{movie.content}</Typography>
+                  ) : (
+                    <Typography>{movie.content.length>67 ? movie.content.slice(0, 67)+'...':movie.content}</Typography>
+                  )}
+                </TableCell>
                 </TableRow>
               )):
               <TableRow >

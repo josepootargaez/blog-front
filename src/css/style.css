@@ -20,3 +20,6 @@
     position: sticky;
     top: 0;
 }
+.click{
+  cursor: pointer;
+}

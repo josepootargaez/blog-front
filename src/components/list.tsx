@@ -15,10 +15,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getListBlog } from "../api/getListBlog";
 import ValidConnection from "./validConnection";
+import isOnline from 'is-online';
 const List: React.FC = () => {
   const [list, setlist]:Array<any>= useState([]);
   const [loading, setLoading] = useState(true);
-  const [connection, setconnection] = useState(navigator.onLine);
+  const [connection, setconnection] = useState(true);
 
 
   async function handler(){
@@ -37,22 +38,25 @@ const List: React.FC = () => {
   };
 
   useEffect(() => {
-
-    const handleConexionChange = () => {
-      setconnection(navigator.onLine);
-    };
-    window.addEventListener('online', handleConexionChange);
-    window.addEventListener('offline', handleConexionChange);
-    if(connection == true){
+      const checkInternetStatus = async () => {
+        try {
+          const status = await isOnline();
+          setconnection(status);
+          return true;
+        } catch (error) {
+          // Manejar el error si ocurre
+          console.error('Error al verificar la conexión a Internet', error);
+          setconnection(false);
+        }
+      }
+       checkInternetStatus();
+      if(connection == true){
      
-      setLoading(false);
-      fetchDataAsync();
-    }
-
-    return () => {
-      window.removeEventListener('online', handleConexionChange);
-      window.removeEventListener('offline', handleConexionChange);
-    };
+        fetchDataAsync();
+        setLoading(false);
+      }
+      const intervalId = setInterval(checkInternetStatus, 5000);
+      return () => clearInterval(intervalId);
   }, []);
 
   const array: Array<any> = list;

@@ -2,7 +2,7 @@
 FROM node:16
 
 # Establece el directorio de trabajo en /usr/src/app
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copia los archivos de la aplicación al contenedor
 COPY package*.json ./
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Comando para iniciar la aplicación en modo producción
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "start"]

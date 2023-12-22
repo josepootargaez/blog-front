@@ -1,13 +1,9 @@
 version: '3'
 services:
   node-app:
+    build: .
     image: node:16
-    container_name: front-back
-    working_dir: /src
+    container_name: blog-front
+    restart: always
     ports:
       - "3000:3000"
-    volumes:
-      - .:/src
-      
-    command: npm start
-

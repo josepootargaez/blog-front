@@ -205,7 +205,7 @@ const List: React.FC = () => {
                   <TableCell>{movie.title}</TableCell>
                   <TableCell>{movie.author}</TableCell>
                   <TableCell>{movie.date}</TableCell>
-                  <TableCell>{movie.content}</TableCell>
+                  <TableCell style={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'normal' }}>{movie.content}</TableCell>
                 </TableRow>
               )):
               <TableRow >

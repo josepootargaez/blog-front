@@ -27,7 +27,13 @@ const List: React.FC = () => {
   }
   const fetchDataAsync = async () => {
     try {
-      const result = await handler();
+      let result = await handler();
+      result=result.map((res:any)=>{
+        const content = res.content.length >67 ?  `${res.content.slice(0, 67)}...` : res.content
+        res.content = content;
+        
+        return res;
+      })
       setlist(result);
       return true
     } catch (error) {
@@ -73,9 +79,11 @@ const List: React.FC = () => {
       if(connection == true){
         listArray = await handler();
         if(listArray.length > 0){
-          const datosFiltrados = listArray.filter((dato:any) =>
-          dato[campoFiltrar].toLowerCase().includes(filtro.toLowerCase())
-        );
+          const datosFiltrados = listArray.filter((dato:any) =>{
+          const content = dato.content.length >67 ?  `${dato.content.slice(0, 67)}...` : dato.content
+          dato.content = content;
+          return dato[campoFiltrar].toLowerCase().includes(filtro.toLowerCase())
+        });
         setlist(datosFiltrados);
         }
       }

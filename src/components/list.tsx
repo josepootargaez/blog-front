@@ -117,8 +117,8 @@ const List: React.FC = () => {
         onChange={(e) => setFiltro(e.target.value)}
         style={{ marginBottom: 16 }}
       />
-      <Grid container spacing={1} className="mi-fila"   style={{ marginBottom: 15 }}>
-        <Grid item xs={2}>
+      <Grid container spacing={2} className="mi-fila"   style={{ marginBottom: 15 }}>
+        <Grid item xs={5} lg={2} md={2}>
         <div>
         <Checkbox
           checked={filtroTitulo}
@@ -132,7 +132,7 @@ const List: React.FC = () => {
       </div>
         </Grid>
 
-        <Grid item xs={2}>
+        <Grid item xs={5} lg={2} md={2}>
           <div>
           <Checkbox
           checked={filtroAutor}
@@ -146,7 +146,7 @@ const List: React.FC = () => {
         </div>
         </Grid>
 
-        <Grid item xs={2}>
+        <Grid item xs={10} lg={2} md={2}>
           <div>
           <Checkbox
           checked={filtroContenido}
@@ -160,14 +160,14 @@ const List: React.FC = () => {
         </div>
         </Grid>
 
-        <Grid item xs={1}>
+        <Grid item xs={4} lg={1} md={2}>
           <Button
            variant="contained"
            color="primary"
            onClick={handleFiltrar}>FIltrar
            </Button>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={7} lg={2} md={3}>
         <Button variant="contained" color="secondary" onClick={handleLimpiarFiltros}>
           Limpiar Filtros
         </Button>

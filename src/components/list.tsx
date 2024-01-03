@@ -202,7 +202,7 @@ const List: React.FC = () => {
             </TableHead>
             <TableBody>
               {list.length > 0 ? list.map((movie:any, index:any) => (
-                <TableRow key={movie.id} >
+                <TableRow key={movie.post_id} >
                   <TableCell>{movie.title}</TableCell>
                   <TableCell>{movie.author}</TableCell>
                   <TableCell>{movie.date}</TableCell>

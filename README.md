@@ -15,6 +15,10 @@ This project was generated with react JS
 * **Typescript** - `v4.7.4`
 * **mui/material** - ` "^5.15.1`
 
+## change the configuration server
+  ### config.ts
+  * **change  url for this**
+    `http://localhost:4000/`
 
 ## Install by Docker
   ### required Docker

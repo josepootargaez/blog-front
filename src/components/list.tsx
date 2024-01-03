@@ -29,7 +29,15 @@ const List: React.FC = () => {
   const fetchDataAsync = async () => {
     try {
       const result = await handler();
-      setlist(result);
+      // let :any=[];
+      const resObj = result.map((res:any)=>{
+        if(res.date.includes("T")){
+          let date= res.date.split("T")
+          res.date=date[0]
+        }
+        return res
+      })
+      setlist(resObj);
       return true
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -77,7 +85,15 @@ const List: React.FC = () => {
           const datosFiltrados = listArray.filter((dato:any) =>{
           return dato[campoFiltrar].toLowerCase().includes(filtro.toLowerCase())
         });
-        setlist(datosFiltrados);
+
+        const resObj = datosFiltrados.map((res:any)=>{
+          if(res.date.includes("T")){
+            let date= res.date.split("T")
+            res.date=date[0]
+          }
+          return res
+        })
+        setlist(resObj);
         }
       }
       

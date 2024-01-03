@@ -1,4 +1,4 @@
-# blog-backend
+# blog-front
 
 This project was generated with react JS
 

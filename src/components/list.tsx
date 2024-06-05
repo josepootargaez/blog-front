@@ -26,17 +26,22 @@ const List: React.FC = () => {
   async function handler(){
    return await getListBlog();
   }
+
+  async function validateDate(result:[]){
+    return result.map((res:any)=>{
+      res.date =  res.date.substring(0,10)
+      if(res.date.includes("T")){
+        let date= res.date.split("T")
+        res.date=date[0]
+
+      }
+      return res
+    })
+  }
   const fetchDataAsync = async () => {
     try {
       const result = await handler();
-      // let :any=[];
-      const resObj = result.map((res:any)=>{
-        if(res.date.includes("T")){
-          let date= res.date.split("T")
-          res.date=date[0]
-        }
-        return res
-      })
+      const resObj = await validateDate(result);
       setlist(resObj);
       return true
     } catch (error) {
@@ -86,13 +91,7 @@ const List: React.FC = () => {
           return dato[campoFiltrar].toLowerCase().includes(filtro.toLowerCase())
         });
 
-        const resObj = datosFiltrados.map((res:any)=>{
-          if(res.date.includes("T")){
-            let date= res.date.split("T")
-            res.date=date[0]
-          }
-          return res
-        })
+        const resObj = await validateDate(datosFiltrados);
         setlist(resObj);
         }
       }
@@ -218,7 +217,7 @@ const List: React.FC = () => {
             </TableHead>
             <TableBody>
               {list.length > 0 ? list.map((movie:any, index:any) => (
-                <TableRow key={movie.post_id} >
+                <TableRow key={movie._id} >
                   <TableCell>{movie.title}</TableCell>
                   <TableCell>{movie.author}</TableCell>
                   <TableCell>{movie.date}</TableCell>

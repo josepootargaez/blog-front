@@ -73,28 +73,34 @@ const List: React.FC = () => {
       return () => clearInterval(intervalId);
   }, []);
 
-  const array: Array<any> = list;
-  const [filter, setFilter] = useState('');
 
   const [filtro, setFiltro] = useState('');
   const [filtroTitulo, setFiltroTitulo] = useState(true);
   const [filtroAutor, setFiltroAutor] = useState(false);
   const [filtroContenido, setFiltroContenido] = useState(false);
-  
+  const [cargaFiltro,setCargaFiltro] = useState(false);
   const handleFiltrar = async () => {
-    const campoFiltrar = filtroTitulo ? 'title' : filtroAutor ? 'author' : filtroContenido ? 'content' : '';
-    let listArray= list;  
+    try {
+      setCargaFiltro(true)
+      const campoFiltrar = filtroTitulo ? 'title' : filtroAutor ? 'author' : filtroContenido ? 'content' : '';
+      let listArray= list;  
       if(connection == true){
         listArray = await handler();
         if(listArray.length > 0){
           const datosFiltrados = listArray.filter((dato:any) =>{
           return dato[campoFiltrar].toLowerCase().includes(filtro.toLowerCase())
         });
-
         const resObj = await validateDate(datosFiltrados);
         setlist(resObj);
         }
       }
+      
+    } catch (error:any) {
+      console.log(error.message);
+    }finally{
+      setCargaFiltro(false);
+    }
+    
       
     
   };
@@ -188,7 +194,8 @@ const List: React.FC = () => {
           <Button
            variant="contained"
            color="primary"
-           onClick={handleFiltrar}>FIltrar
+           disabled={cargaFiltro}
+           onClick={handleFiltrar}>{cargaFiltro ? 'Filtrar' : 'Filtrar'}
            </Button>
         </Grid>
         <Grid item xs={7} lg={2} md={3}>

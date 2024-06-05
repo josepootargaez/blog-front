@@ -5,7 +5,8 @@ import { createBlog } from '../api/createBlog';
 import { useNavigate } from 'react-router-dom';
 const Addblog =  () => {
     const navigate = useNavigate();
-
+   const [errorApi,setError] = useState('');
+   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData]:any = useState({
     title: '',
     author: '',
@@ -25,40 +26,51 @@ const Addblog =  () => {
   };
 
   const handleSubmit = async (e:any) => {
-    e.preventDefault();
-    // Validar campos obligatorios
-    const errors:any = {};
-    Object.keys(formData).forEach((key) => {
-      if (formData[key].trim() === '') {
-        errors[key] = 'Este campo es obligatorio';
+    try {
+      e.preventDefault();
+      setIsSubmitting(true);
+      // Validar campos obligatorios
+      const errors:any = {};
+      Object.keys(formData).forEach((key) => {
+        if (formData[key].trim() === '') {
+          errors[key] = 'Este campo es obligatorio';
+        }
+      });
+  
+      if (Object.keys(errors).length > 0) {
+        setFormErrors(errors);
+      } else {
+        // Enviar el formulario o realizar otras acciones
+          const fecha = new Date();
+          const año = fecha.getFullYear();
+          const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+          const dia = String(fecha.getDate()).padStart(2, '0');
+          const horas = String(fecha.getHours()).padStart(2, '0');
+          const minutos = String(fecha.getMinutes()).padStart(2, '0');
+          const segundos = String(fecha.getSeconds()).padStart(2, '0');
+  
+    // Formateamos la cadena de fecha
+    const fechaString = `${año}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
+        const obj = {
+          ...formData,
+          date:fechaString
+        }
+        console.log('Formulario enviado:', obj);
+        const res:any = await createBlog(obj);
+        if(res?.success == true){
+          navigate('/');
+        }else{
+          const txtError = res.response.data?.message ?? ''; 
+          setError(txtError);
+        }
       }
-    });
-
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-    } else {
-      // Enviar el formulario o realizar otras acciones
-        const fecha = new Date();
-        const año = fecha.getFullYear();
-        const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
-        const dia = String(fecha.getDate()).padStart(2, '0');
-        const horas = String(fecha.getHours()).padStart(2, '0');
-        const minutos = String(fecha.getMinutes()).padStart(2, '0');
-        const segundos = String(fecha.getSeconds()).padStart(2, '0');
-
-  // Formateamos la cadena de fecha
-  const fechaString = `${año}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
-      const obj = {
-        ...formData,
-        date:fechaString
-      }
-      console.log('Formulario enviado:', obj);
-      const res:any = await createBlog(obj);
-      if(res?.success == true){
-        navigate('/');
-      }
-    }
-  };
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }finally {
+      setIsSubmitting(false);
+  }
+  }
+   
 
   return (
     <>
@@ -107,10 +119,13 @@ const Addblog =  () => {
                 required
                 />
 
-                <Button type="submit" variant="contained" color="success" fullWidth style={{ marginTop: 16 }}>
-                Guardar
+                <Button type="submit" variant="contained" color="success" fullWidth style={{ marginTop: 16 }} disabled={isSubmitting}>
+                {isSubmitting ? 'Guardando...' : 'Guardar'}
                 </Button>
             </form>
+            <Typography align="center" gutterBottom sx={{ mt: 2, color: 'red' }} >
+                {errorApi}
+            </Typography>
             </Paper>
         </Grid>
         </Grid>
